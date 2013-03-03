@@ -100,7 +100,7 @@ public class DashboardView extends VerticalLayout implements View {
         top.setComponentAlignment(notify, Alignment.MIDDLE_LEFT);
 
         Button edit = new Button();
-        edit.addStyleName("icon-edit");
+        edit.addStyleName("icon-viewsite");
         edit.addStyleName("icon-only");
         top.addComponent(edit);
         edit.setDescription("View Site");

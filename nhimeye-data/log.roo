@@ -1,0 +1,148 @@
+// Spring Roo 1.2.3.RELEASE [rev 7fd62b6] log opened at 2013-01-16 22:26:35
+project --topLevelPackage com.nhimeye.data --projectName data 
+mongo setup --host localhost --port 27017
+enum type --class ~.reference.FieldType
+enum constant --name TextField
+enum constant --name RichTextArea
+enum constant --name NumberField
+enum constant --name RadioButtons
+enum constant --name MultiSelect
+enum constant --name MultiCheckboxes
+enum constant --name Datetime
+enum constant --name URLsField
+enum constant --name Document
+enum constant --name Video
+enum constant --name Image
+enum constant --name WYSIWYG
+enum type --class ~.reference.EntityStatus
+enum constant --name CheckedOut
+enum constant --name Locked
+enum constant --name Finalized
+enum constant --name Archived
+enum constant --name New --permitReservedWords 
+enum type --class ~.reference.UserProvider
+enum constant --name LocalSystem
+enum constant --name FaceBook
+enum constant --name Ldap
+enum constant --name Google
+enum type --class ~.reference.Type
+enum constant --name Document
+enum constant --name Page
+
+entity mongo --class ~.domain.User --testAutomatically
+field string --fieldName userName --sizeMax 25 --notNull --unique true
+field string --fieldName password --sizeMax 16 --notNull 
+field string --fieldName firstName --sizeMax 25 --notNull
+field string --fieldName lastName --sizeMax 25
+field string --fieldName email --regexp "[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z0-9]+" --notNull
+field string --fieldName phone  --sizeMax 15
+field boolean --fieldName active --notNull
+field enum --fieldName provider --type ~.reference.UserProvider --notNull
+entity mongo --class ~.domain.Group  --testAutomatically 
+field string --fieldName name --sizeMax 125 --notNull --unique true 
+field string --fieldName description --sizeMax 250
+field set --fieldName users --type ~.domain.User --cardinality MANY_TO_MANY --mappedBy groups
+entity mongo --class ~.domain.Permission --testAutomatically 
+field string --fieldName name --sizeMax 125 --notNull --unique true
+field string --fieldName description --sizeMax 250 --notNull
+repository mongo --interface ~.repository.PermissionRepository --entity ~.domain.Permission
+service --interface ~.service.PermissionService --entity ~.domain.Permission
+entity mongo --class ~.domain.Role  --testAutomatically
+field string --fieldName name --sizeMax 125 --notNull --unique true
+field string --fieldName description --sizeMax 250
+field set --fieldName permissions --type ~.domain.Permission --cardinality MANY_TO_MANY 
+repository mongo --interface ~.repository.RoleRepository --entity ~.domain.Role
+service --interface ~.service.RoleService --entity ~.domain.Role
+entity mongo --class ~.domain.PermissionSection --testAutomatically
+field string --fieldName name --sizeMax 125 --notNull --unique true
+field set --fieldName permissions --type ~.domain.Permission --cardinality ONE_TO_MANY 
+repository mongo --interface ~.repository.PermissionSectionRepository --entity ~.domain.PermissionSection
+service --interface ~.service.PermissionSectionService --entity ~.domain.PermissionSection
+focus --class ~.domain.Group
+field set --fieldName roles --type ~.domain.Role --cardinality MANY_TO_MANY 
+repository mongo --interface ~.repository.GroupRepository --entity ~.domain.Group 
+service --interface ~.service.GroupService --entity ~.domain.Group
+focus --class ~.domain.User
+field set --fieldName groups --type ~.domain.Group --cardinality MANY_TO_MANY 
+field set --fieldName roles --type ~.domain.Role --cardinality MANY_TO_MANY 
+repository mongo --interface ~.repository.UserRepository --entity ~.domain.User
+service --interface ~.service.UserService --entity ~.domain.User
+focus --class ~.domain.Role
+field set --fieldName groups --type ~.domain.Group --cardinality MANY_TO_MANY --mappedBy roles
+field set --fieldName users  --type ~.domain.User --cardinality MANY_TO_MANY  --mappedBy roles
+entity mongo --class ~.domain.Field  --testAutomatically 
+field string --fieldName name --sizeMax 125 --notNull --unique true
+field string --fieldName description --sizeMax 250
+field string --fieldName options --sizeMax 5000 
+field enum --fieldName fieldType --type ~.reference.FieldType --notNull
+repository mongo --interface ~.repository.FieldRepository --entity ~.domain.Field
+service --interface ~.service.FieldService --entity ~.domain.Field
+entity mongo --class ~.domain.Configuration  --testAutomatically 
+field string --fieldName name --sizeMax 125 --notNull --unique true 
+field string --fieldName description --sizeMax 250
+repository mongo --interface ~.repository.ConfigurationRepository --entity ~.domain.Configuration
+service --interface ~.service.ConfigurationService --entity ~.domain.Configuration
+entity mongo --class ~.domain.FieldConfiguration  --testAutomatically 
+field string --fieldName displayName --sizeMax 250
+field boolean --fieldName required --notNull
+field boolean --fieldName searchable --notNull 
+field boolean --fieldName hidden --notNull
+field number --fieldName position --permitReservedWords --type java.lang.Integer --notNull
+field reference --fieldName configuration --type ~domain.Configuration --class ~.domain.FieldConfiguration
+field reference --fieldName field --type ~.domain.Field --class ~.domain.FieldConfiguration
+repository mongo --interface ~.repository.FieldConfigurationRepository --entity ~.domain.FieldConfiguration
+service --interface ~.service.FieldConfigurationService --entity ~.domain.FieldConfiguration
+entity mongo --class ~.domain.ObjectType  --testAutomatically 
+field string --fieldName name --sizeMax 125 --notNull --unique true
+field string --fieldName description --sizeMax 250
+field string --fieldName options --sizeMax 5000
+field enum --fieldName type --type ~.reference.Type --notNull
+field reference --fieldName configuration --type ~domain.Configuration --class ~.domain.ObjectType
+repository mongo --interface ~.repository.ObjectTypeRepository --entity ~.domain.ObjectType
+service --interface ~.service.ObjectTypeService --entity ~.domain.ObjectType
+entity mongo --class ~.domain.Document 
+field string --fieldName name --sizeMin 3 --sizeMax 260 
+field number --fieldName docSetId --type ava.math.BigInteger
+field date --fieldName createDate --type java.util.Date --notNull
+field date --fieldName finalizeDate --type java.util.Date --notNull
+field date --fieldName deactivateDate --type java.util.Date --notNull
+field enum --fieldName status --type ~.reference.EntityStatus --notNull
+field string --fieldName path --permitReservedWords --sizeMin 3 --sizeMax 260
+field boolean --fieldName current --permitReservedWords 
+field reference --fieldName owner --type ~.domain.User --class ~.domain.Document
+field reference --fieldName ObjectType --type ~.domain.ObjectType --class ~.domain.Document
+field number --fieldName size --permitReservedWords --type java.lang.Integer --notNull 
+field string --fieldName MIMEType --sizeMax 100 
+field boolean --fieldName showOnMenu --notNull
+field number --fieldName menuOrder --permitReservedWords --type java.lang.Integer --notNull
+entity mongo --class ~.domain.Folder  --testAutomatically 
+field string --fieldName name --sizeMin 1 --sizeMax 260
+field reference --fieldName owner --type ~.domain.User
+field reference --fieldName parent --type ~.domain.Folder --class ~.domain.Folder
+field set --fieldName documents --type ~.domain.Document --cardinality ONE_TO_MANY --mappedBy  folder
+repository mongo --interface ~.repository.FolderRepository --entity ~.domain.Folder
+service --interface ~.service.FolderService --entity ~.domain.Folder
+entity mongo --class ~.domain.FieldValue  --testAutomatically 
+field reference --fieldName field --type ~.domain.Field --class ~.domain.FieldValue
+field reference --fieldName entity --type ~.domain.Document --class ~domain.FieldValue
+field file --fieldName value --permitReservedWords --contentType ZIP --notNull
+repository mongo --interface ~.repository.FieldValueRepository --entity ~.domain.FieldValue
+service --interface ~.service.FieldValueService --entity ~.domain.FieldValue
+focus --class ~.domain.Document
+field set --fieldName fieldValues --type ~.domain.FieldValue --cardinality ONE_TO_MANY --mappedBy  entity
+field reference --fieldName folder --type ~.domain.Folder 
+repository mongo --interface ~.repository.DocumentRepository --entity ~.domain.Document
+service --interface ~.service.DocumentService --entity ~.domain.Document
+
+focus  --class ~.domain.Field
+field string --fieldName displayName --sizeMax 250
+
+focus --class ~.domain.Document
+field number --fieldName ownerId --type java.math.BigInteger
+
+focus --class ~.domain.Document
+field string --fieldName fileStoreId
+focus --class ~.domain.Document
+field string --fieldName contentType
+
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-03-03 21:29:50
