@@ -26,7 +26,11 @@ import com.vaadin.ui.*;
 
 public class LoginView extends VerticalLayout{
 
-      public LoginView (EventBus eventBus,boolean exit, CssLayout root,HelpManager helpManager, UI ui)
+    private Label error;
+    private CssLayout loginPanel;
+    private TextField username;
+
+    public LoginView (EventBus eventBus,boolean exit, CssLayout root,HelpManager helpManager, UI ui)
       {
           setSizeFull();
           addStyleName("login-layout");
@@ -49,7 +53,7 @@ public class LoginView extends VerticalLayout{
         root.addStyleName("login");
         root.addComponent(this);
 
-        final CssLayout loginPanel = new CssLayout();
+        loginPanel = new CssLayout();
         loginPanel.addStyleName("login-panel");
 
         HorizontalLayout labels = new HorizontalLayout();
@@ -76,7 +80,7 @@ public class LoginView extends VerticalLayout{
         fields.setMargin(true);
         fields.addStyleName("fields");
 
-        final TextField username = new TextField("Username");
+        username = new TextField("Username");
         username.focus();
         fields.addComponent(username);
 
@@ -106,21 +110,7 @@ public class LoginView extends VerticalLayout{
                     signin.removeShortcutListener(enter);
                     handleLogin(eventBus,username.getValue(),password.getValue());
                 } else {
-                    if (loginPanel.getComponentCount() > 2) {
-                        // Remove the previous error message
-                        loginPanel.removeComponent(loginPanel.getComponent(2));
-                    }
-                    // Add new error message
-                    Label error = new Label(
-                            "Wrong username or password.",
-                            ContentMode.HTML);
-                    error.addStyleName("error");
-                    error.setSizeUndefined();
-                    error.addStyleName("light");
-                    // Add animation
-                    error.addStyleName("v-animate-reveal");
-                    loginPanel.addComponent(error);
-                    username.focus();
+                   addErrorMessage("Wrong username or password.");
                 }
             }
         });
@@ -131,6 +121,25 @@ public class LoginView extends VerticalLayout{
 
         addComponent(loginPanel);
         setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
+    }
+
+    public void addErrorMessage(String message) {
+        if (loginPanel.getComponentCount() > 2) {
+            // Remove the previous error message
+            loginPanel.removeComponent(loginPanel.getComponent(2));
+        }
+            // Add new error message
+            error = new Label(message,
+                    ContentMode.HTML);
+            error.addStyleName("error");
+            error.setSizeUndefined();
+            error.addStyleName("light");
+            // Add animation
+            error.addStyleName("v-animate-reveal");
+
+            loginPanel.addComponent(error);
+            username.focus();
+
     }
 
     private void handleLogin(final EventBus eventBus, String username, String password)

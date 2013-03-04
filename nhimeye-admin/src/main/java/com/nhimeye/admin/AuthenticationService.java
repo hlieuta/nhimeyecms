@@ -1,0 +1,69 @@
+/*
+ * Copyright 2013 NHIMEYE Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
+ */
+package com.nhimeye.admin;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetails;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
+public class AuthenticationService {
+
+	public static void handleAuthentication(String login, String password,
+			HttpServletRequest httpRequest) {
+
+		UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+				login, password);
+
+		token.setDetails(new WebAuthenticationDetails(httpRequest));
+
+		ServletContext servletContext = httpRequest.getSession()
+				.getServletContext();
+
+		WebApplicationContext wac = WebApplicationContextUtils
+				.getRequiredWebApplicationContext(servletContext);
+
+		AuthenticationManager authManager = (AuthenticationManager) wac
+				.getBean("authenticationManager");
+
+		Authentication authentication = authManager.authenticate(token);
+
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+	}
+
+	public static void handleLogout(HttpServletRequest httpRequest) {
+
+		ServletContext servletContext = httpRequest.getSession()
+				.getServletContext();
+
+		WebApplicationContext wac = WebApplicationContextUtils
+				.getRequiredWebApplicationContext(servletContext);
+
+		LogoutHandler logoutHandler = wac.getBean(LogoutHandler.class);
+
+		Authentication authentication = SecurityContextHolder.getContext()
+				.getAuthentication();
+		
+		logoutHandler.logout(httpRequest, null, authentication);
+	}
+}

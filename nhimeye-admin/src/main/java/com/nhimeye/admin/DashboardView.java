@@ -17,6 +17,8 @@ package com.nhimeye.admin;
 
 
 import java.text.DecimalFormat;
+
+import com.nhimeye.admin.DashboardUI;
 import com.vaadin.data.Property;
 import com.vaadin.event.LayoutEvents.LayoutClickEvent;
 import com.vaadin.event.LayoutEvents.LayoutClickListener;

@@ -33,6 +33,9 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -83,7 +86,14 @@ public class DashboardUI extends UI {
         bg.setSizeUndefined();
         bg.addStyleName("login-bg");
         root.addComponent(bg);
-        loginView = new LoginView(bus,false,root,helpManager,this);
+        if(isAuthenticated())
+        {
+            buildMainView();
+        }
+        else
+        {
+            loginView = new LoginView(bus,false,root,helpManager,this);
+        }
 
     }
 
@@ -138,9 +148,7 @@ public class DashboardUI extends UI {
                                         new ThemeResource("img/profile-pic.png"));
                                 profilePic.setWidth("34px");
                                 addComponent(profilePic);
-                                final Label userName = new Label("Huy"
-                                        + " "
-                                        + "Ta");
+                                final Label userName = new Label(" " + SecurityContextHolder.getContext().getAuthentication().getName());
                                 userName.setSizeUndefined();
                                 addComponent(userName);
 
@@ -168,6 +176,7 @@ public class DashboardUI extends UI {
                                 exit.addClickListener(new ClickListener() {
                                     @Override
                                     public void buttonClick(final ClickEvent event) {
+                                        AuthenticationService.handleLogout(RequestHolder.getRequest());
                                         loginView = new LoginView(bus,true,root,helpManager,getUI());
                                     }
                                 });
@@ -263,11 +272,30 @@ public class DashboardUI extends UI {
         viewNameToMenuButton.get("/dashboard").setCaption("Dashboard");
     }
 
-
+    private Boolean isAuthenticated() {
+        Authentication authentication = SecurityContextHolder.getContext()
+                .getAuthentication();
+        return authentication == null ? false : authentication
+                .isAuthenticated();
+    }
 
     @Subscribe
     public void login(final LoginEvent event) {
-        buildMainView();
+
+        try {
+            AuthenticationService.handleAuthentication(event.getLogin(),
+                    event.getPassword(), RequestHolder.getRequest());
+
+            buildMainView();
+
+
+        } catch (BadCredentialsException e) {
+            loginView.addErrorMessage("Wrong username or password.");
+
+        } catch (Exception ex) {
+            loginView.addErrorMessage("Wrong username or password.");
+
+        }
 
     }
 
