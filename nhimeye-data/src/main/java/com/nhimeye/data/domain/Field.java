@@ -20,6 +20,9 @@ public class Field {
     @Column(unique = true)
     @Size(max = 125)
     private String name;
+    
+    @Size(max = 255)
+    private String description;
 
     private int min;
 

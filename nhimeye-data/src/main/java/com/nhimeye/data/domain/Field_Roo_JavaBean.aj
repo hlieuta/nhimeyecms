@@ -16,6 +16,14 @@ privileged aspect Field_Roo_JavaBean {
         this.name = name;
     }
     
+    public String Field.getDescription() {
+        return this.description;
+    }
+    
+    public void Field.setDescription(String description) {
+        this.description = description;
+    }
+    
     public int Field.getMin() {
         return this.min;
     }

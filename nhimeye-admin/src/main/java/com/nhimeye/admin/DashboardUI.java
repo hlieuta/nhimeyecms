@@ -57,7 +57,14 @@ public class DashboardUI extends UI {
 
     HashMap<String, Class<? extends View>> routes = new HashMap<String, Class<? extends View>>() {
         {
+
             put("/dashboard", DashboardView.class);
+            put("/articles", DashboardView.class);
+            put("/documents", DashboardView.class);
+            put("/recordtypes", DashboardView.class);
+            put("/fields", FieldView.class);
+            put("/users", DashboardView.class);
+            put("/roles", DashboardView.class);
 
         }
     };

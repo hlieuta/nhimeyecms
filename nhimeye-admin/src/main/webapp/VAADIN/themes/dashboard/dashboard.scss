@@ -25,7 +25,7 @@
 @import "views/schedule.scss";
 @import "views/sales.scss";
 @import "views/reports.scss";
-@import "views/transactions.scss";
+@import "views/abstract";
 
 
 @mixin dashboard {
@@ -47,7 +47,7 @@
 	@include dashboard-schedule-view;
 	@include dashboard-sales-view;
 	@include dashboard-reports-view;
-	@include dashboard-transactions-view;
+	@include dashboard-abstract-view;
 
 
 	.v-view {

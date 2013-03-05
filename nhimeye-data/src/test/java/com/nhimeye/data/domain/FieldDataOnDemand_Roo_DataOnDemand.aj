@@ -31,11 +31,20 @@ privileged aspect FieldDataOnDemand_Roo_DataOnDemand {
     
     public Field FieldDataOnDemand.getNewTransientField(int index) {
         Field obj = new Field();
+        setDescription(obj, index);
         setFieldType(obj, index);
         setMax(obj, index);
         setMin(obj, index);
         setName(obj, index);
         return obj;
+    }
+    
+    public void FieldDataOnDemand.setDescription(Field obj, int index) {
+        String description = "description_" + index;
+        if (description.length() > 255) {
+            description = description.substring(0, 255);
+        }
+        obj.setDescription(description);
     }
     
     public void FieldDataOnDemand.setFieldType(Field obj, int index) {
