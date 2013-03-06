@@ -33,6 +33,7 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,6 +42,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 
+@Configurable(preConstruction = true)
 @Theme("dashboard")
 @Title("NHIMEYE CMS")
 public class DashboardUI extends UI {

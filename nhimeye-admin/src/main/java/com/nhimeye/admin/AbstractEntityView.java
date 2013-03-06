@@ -19,7 +19,7 @@ package com.nhimeye.admin;
 
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
-import com.vaadin.data.util.IndexedContainer;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
 import com.vaadin.event.FieldEvents;
@@ -30,9 +30,12 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
+import org.springframework.beans.factory.annotation.Configurable;
 
+import java.math.BigInteger;
 import java.util.Set;
 
+@Configurable(preConstruction = true)
 public abstract class AbstractEntityView<E> extends VerticalLayout implements View {
 
     private Table table;
@@ -45,7 +48,7 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
 
         //Set table container
         getTable().setContainerDataSource(getTableContainer());
-
+        configureTable(getTable());
         //Build layout
         HorizontalLayout toolbar = new HorizontalLayout();
         toolbar.setWidth("100%");
@@ -171,7 +174,7 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
             return false;
         String val = item.getItemProperty(prop).getValue().toString().trim()
                 .toLowerCase();
-        if (val.contains(text.toLowerCase().trim()))
+        if (val.startsWith(text.toLowerCase().trim()))
             return true;
 
         return false;
@@ -188,7 +191,7 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
             table.setColumnCollapsingAllowed(true);
             table.setColumnReorderingAllowed(true);
             table.setMultiSelect(true);
-            configureTable(table);
+
         }
         return table;
     }
@@ -197,7 +200,7 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
 
     protected abstract Label getTitle();
 
-   protected abstract IndexedContainer getTableContainer();
+   protected abstract BeanContainer<BigInteger,E> getTableContainer();
 
     protected abstract Set<String> getFilterProperties();
 }

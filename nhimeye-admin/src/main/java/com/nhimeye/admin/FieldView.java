@@ -15,18 +15,29 @@ package com.nhimeye.admin;
  * the License.
  */
 
-import com.vaadin.data.util.IndexedContainer;
+import com.nhimeye.data.domain.Field;
+import com.nhimeye.data.service.FieldService;
+import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
+import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.Set;
 
-public class FieldView extends AbstractEntityView {
+@Configurable(preConstruction = true)
+public class FieldView extends AbstractEntityView<Field> {
 
+    BeanContainer<BigInteger,Field>   container;
+
+    @Autowired
+    FieldService fieldService;
 
     @Override
     protected void configureTable(Table table) {
-
+        table.setVisibleColumns(new Object[] { "name", "description", "fieldType"});
     }
 
     @Override
@@ -35,13 +46,27 @@ public class FieldView extends AbstractEntityView {
     }
 
     @Override
-    protected IndexedContainer getTableContainer() {
-        IndexedContainer revenue = new IndexedContainer();
-        return revenue;
+    protected BeanContainer<BigInteger,Field> getTableContainer() {
+        if(container == null)
+        {
+            container = new BeanContainer<BigInteger,Field>(Field.class);
+            container.setBeanIdProperty("id");
+
+            for (Field entity : fieldService.findAllFields()) {
+                container.addBean(entity);
+            }
+        }
+        return container;
     }
 
     @Override
     protected Set<String> getFilterProperties() {
-        return null;
+        return new HashSet<String>(){
+            {
+                add("name");
+                add("description");
+
+            }
+        };
     }
 }
