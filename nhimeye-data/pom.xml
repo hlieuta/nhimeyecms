@@ -165,7 +165,7 @@
         <dependency>
             <groupId>org.cloudfoundry</groupId>
             <artifactId>cloudfoundry-runtime</artifactId>
-            <version>0.8.0</version>
+            <version>0.8.1</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
@@ -194,7 +194,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>aspectj-maven-plugin</artifactId>
-                <version>1.4</version>
+                <version>1.2</version>
                 <dependencies>
                     <dependency>
                         <groupId>org.aspectj</groupId>

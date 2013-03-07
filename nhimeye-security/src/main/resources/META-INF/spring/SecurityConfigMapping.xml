@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<mapping>
+	<class name="com.nhimeye.data.domain.Permission">
+
+		<map-to xml="permission" />
+
+		<field name="name" type="string">
+			<bind-xml name="name" node="attribute" />
+		</field>
+
+		<field name="description" type="string">
+			<bind-xml name="description" node="attribute" />
+		</field>
+	</class>
+
+	<class name="com.nhimeye.data.domain.PermissionSection">
+
+		<map-to xml="pemissionSection" />
+
+		<field name="name" type="string">
+			<bind-xml name="name" node="attribute" />
+		</field>
+		<field name="permissions" type="com.nhimeye.data.domain.Permission"
+			collection="collection">
+			<bind-xml name="permission" node="element" />
+		</field>
+	</class>
+
+	<class name="com.nhimeye.security.SecurityConfig">
+
+		<map-to xml="security-config" />
+
+		<field name="pemissionSections" type="com.nhimeye.data.domain.PermissionSection"
+			collection="collection" >
+			<bind-xml name="pemission-section" node="element" />
+			</field>
+	</class>
+
+</mapping>
