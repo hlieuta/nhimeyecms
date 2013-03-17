@@ -120,6 +120,48 @@
 	
 		@include box-shadow($outline);
 	}
+
+  .danger.v-button {
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0,0,0,.4);
+    font-weight: bold;
+    -webkit-font-smoothing: antialiased;
+
+    border-color: #c6040a;
+    border-top-color: #c61005;
+    border-bottom-color: #9d041d;
+
+    background: #ea303e;
+
+    background: -moz-linear-gradient(top, #f78a93 0%, #ea3b37 6%, #ea303e 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #f78a93), color-stop(6%, #ea3b37), color-stop(100%, #ea303e));
+    background: -webkit-linear-gradient(top, #f78a93 0%, #ea3b37 6%, #ea303e 100%);
+    background: -o-linear-gradient(top, #f78a93 0%, #ea3b37 6%, #ea303e 100%);
+    background: -ms-linear-gradient(top, #f78a93 0%, #ea3b37 6%, #ea303e 100%);
+
+  }
+
+  .danger.v-button:focus {
+    xborder-color: #ea023a;
+    @include box-shadow(0 0 4px #ea023a);
+  }
+
+  .danger.v-button:active,
+  .v-pressed.v-button.default {
+    border-color: #ff0c15;
+    border-top-color: #fa0507;
+    border-bottom-color: #ff1a06;
+
+    background: #ea023a;
+
+    background: -moz-linear-gradient(top, #bf0d17 0%, #c90528 6%, #ea1050 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #bf0d17), color-stop(8%, #c90528), color-stop(100%, #ea1050));
+    background: -webkit-linear-gradient(top, #bf0d17 0%, #c90528 6%, #ea1050 100%);
+    background: -o-linear-gradient(top, #bf0d17 0%, #c90528 6%, #ea1050 100%);
+    background: -ms-linear-gradient(top, #bf0d17 0%, #c90528 6%, #ea1050 100%);
+
+    @include box-shadow($outline);
+  }
 	
 	
 	

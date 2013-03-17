@@ -16,10 +16,13 @@ package com.nhimeye.admin;
  */
 
 import com.nhimeye.data.domain.Field;
+import com.nhimeye.data.reference.FieldType;
 import com.nhimeye.data.service.FieldService;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.Window;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -68,5 +71,16 @@ public class FieldView extends AbstractEntityView<Field> {
 
             }
         };
+    }
+
+    @Override
+    protected void createNewButtonClicked() {
+        Field field = new Field();
+        field.setName("New Field");
+        field.setDescription("Test description");
+        field.setFieldType(FieldType.TextField);
+        Window w = new FieldDetailsWindow(field);
+        UI.getCurrent().addWindow(w);
+        w.focus();
     }
 }

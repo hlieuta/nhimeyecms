@@ -1,21 +1,17 @@
 package com.nhimeye.data.domain;
 
-import java.math.BigInteger;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Enumerated;
-import javax.persistence.ManyToMany;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import com.nhimeye.data.reference.Type;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.layers.repository.mongo.RooMongoEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.nhimeye.data.reference.Type;
+import javax.persistence.Column;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 @RooJavaBean
 @RooToString
@@ -36,6 +32,5 @@ public class RecordType {
     @Enumerated
     private Type type;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    private  Set<Field> fields = new HashSet<Field>();
+    private  Set<java.math.BigInteger> fields = new HashSet<java.math.BigInteger>();
 }

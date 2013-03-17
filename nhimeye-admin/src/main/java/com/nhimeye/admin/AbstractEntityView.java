@@ -130,7 +130,8 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
         newReport.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                //createNewReportFromSelection();
+                createNewButtonClicked();
+
             }
         });
         newReport.setEnabled(true);
@@ -203,4 +204,6 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
    protected abstract BeanContainer<BigInteger,E> getTableContainer();
 
     protected abstract Set<String> getFilterProperties();
+
+    protected abstract void createNewButtonClicked();
 }

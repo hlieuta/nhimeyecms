@@ -3,7 +3,6 @@
 
 package com.nhimeye.data.domain;
 
-import com.nhimeye.data.domain.Field;
 import com.nhimeye.data.domain.RecordType;
 import com.nhimeye.data.reference.Type;
 import java.math.BigInteger;
@@ -43,11 +42,11 @@ privileged aspect RecordType_Roo_JavaBean {
         this.type = type;
     }
     
-    public Set<Field> RecordType.getFields() {
+    public Set<BigInteger> RecordType.getFields() {
         return this.fields;
     }
     
-    public void RecordType.setFields(Set<Field> fields) {
+    public void RecordType.setFields(Set<BigInteger> fields) {
         this.fields = fields;
     }
     

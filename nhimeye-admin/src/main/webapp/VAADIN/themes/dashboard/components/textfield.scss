@@ -1,6 +1,7 @@
 @mixin dashboard-textfield {
 	
 	.v-textfield,
+    .v-textarea,
 	.v-filterselect {
 		@include border-radius(3px);
 		border: 1px solid #c9c8c7;
@@ -14,6 +15,7 @@
 		line-height: 1;
 		
 		margin: 0;
+        width: 20em;
 	}
 	
 	input.v-widget.v-textfield,
