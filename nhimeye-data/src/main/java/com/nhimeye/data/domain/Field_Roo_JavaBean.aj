@@ -40,6 +40,22 @@ privileged aspect Field_Roo_JavaBean {
         this.max = max;
     }
     
+    public String Field.getDefaultValue() {
+        return this.defaultValue;
+    }
+    
+    public void Field.setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+    
+    public int Field.getMaxLength() {
+        return this.maxLength;
+    }
+    
+    public void Field.setMaxLength(int maxLength) {
+        this.maxLength = maxLength;
+    }
+    
     public FieldType Field.getFieldType() {
         return this.fieldType;
     }

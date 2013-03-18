@@ -76,8 +76,6 @@ public class FieldView extends AbstractEntityView<Field> {
     @Override
     protected void createNewButtonClicked() {
         Field field = new Field();
-        field.setName("New Field");
-        field.setDescription("Test description");
         field.setFieldType(FieldType.TextField);
         Window w = new FieldDetailsWindow(field);
         UI.getCurrent().addWindow(w);

@@ -31,12 +31,19 @@ privileged aspect FieldDataOnDemand_Roo_DataOnDemand {
     
     public Field FieldDataOnDemand.getNewTransientField(int index) {
         Field obj = new Field();
+        setDefaultValue(obj, index);
         setDescription(obj, index);
         setFieldType(obj, index);
         setMax(obj, index);
+        setMaxLength(obj, index);
         setMin(obj, index);
         setName(obj, index);
         return obj;
+    }
+    
+    public void FieldDataOnDemand.setDefaultValue(Field obj, int index) {
+        String defaultValue = "defaultValue_" + index;
+        obj.setDefaultValue(defaultValue);
     }
     
     public void FieldDataOnDemand.setDescription(Field obj, int index) {
@@ -55,6 +62,14 @@ privileged aspect FieldDataOnDemand_Roo_DataOnDemand {
     public void FieldDataOnDemand.setMax(Field obj, int index) {
         int max = index;
         obj.setMax(max);
+    }
+    
+    public void FieldDataOnDemand.setMaxLength(Field obj, int index) {
+        int maxLength = index;
+        if (maxLength < 0) {
+            maxLength = 0;
+        }
+        obj.setMaxLength(maxLength);
     }
     
     public void FieldDataOnDemand.setMin(Field obj, int index) {

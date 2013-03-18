@@ -1,15 +1,15 @@
 package com.nhimeye.data.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
+import com.nhimeye.data.reference.FieldType;
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.layers.repository.mongo.RooMongoEntity;
 import org.springframework.roo.addon.tostring.RooToString;
 
-import com.nhimeye.data.reference.FieldType;
+import javax.persistence.Column;
+import javax.persistence.Enumerated;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @RooJavaBean
 @RooToString
@@ -18,7 +18,7 @@ public class Field {
 
     @NotNull
     @Column(unique = true)
-    @Size(max = 125)
+    @Size(min = 2,max = 125)
     private String name;
     
     @Size(max = 255)
@@ -27,6 +27,11 @@ public class Field {
     private int min;
 
     private int max;
+    
+    private String defaultValue;
+    
+    @Min(0)
+    private int maxLength;
 
     @NotNull
     @Enumerated

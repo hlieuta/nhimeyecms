@@ -1,4 +1,5 @@
-package com.nhimeye.admin;/*
+package com.nhimeye.admin;
+/*
  * Copyright 2013 NHIMEYE Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -14,24 +15,45 @@ package com.nhimeye.admin;/*
  * the License.
  */
 
+import com.nhimeye.data.domain.Field;
+import com.vaadin.data.Validator;
+import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.ui.TextField;
 
 public class TextFieldView extends FieldTypeView{
 
-    TextField maxLenght;
+    com.vaadin.ui.Field<?> maxLength = null;
     TextField defaultValue;
 
     TextFieldView(FieldDetailsView detailsView) {
         super(detailsView);
-        maxLenght = new TextField("Max length:");
-        defaultValue = new TextField("Default value:");
-        detailsView.addComponent(maxLenght);
+        maxLength = detailsView.fieldGroup.buildAndBind("Max Length:","maxLength");
+        defaultValue = detailsView.fieldGroup.buildAndBind("Default Value:","defaultValue",TextField.class);
+        defaultValue.setNullRepresentation("");
+        maxLength.addValidator(new BeanValidator(Field.class,"maxLength"));
+        defaultValue.addValidator(new Validator() {
+            @Override
+            public void validate(Object value) throws InvalidValueException {
+                if(maxLength != null)
+                {
+                    final int length = Integer.parseInt(maxLength.getValue().toString());
+                    if(length> 0 && length < defaultValue.getValue().toString().length())
+                    {
+                        throw new InvalidValueException("Default Value can no be grater than Max Length.");
+                    }
+                }
+            }
+        });
+        detailsView.addComponent(maxLength);
         detailsView.addComponent(defaultValue);
     }
 
     @Override
     public void removeComponents() {
-        detailsView.removeComponent(maxLenght);
+        detailsView.fieldGroup.unbind(maxLength);
+        detailsView.fieldGroup.unbind(defaultValue);
+        detailsView.removeComponent(maxLength);
         detailsView.removeComponent(defaultValue);
+
     }
 }

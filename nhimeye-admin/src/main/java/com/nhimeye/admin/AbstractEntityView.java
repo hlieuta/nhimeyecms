@@ -201,7 +201,7 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
 
     protected abstract Label getTitle();
 
-   protected abstract BeanContainer<BigInteger,E> getTableContainer();
+    protected abstract BeanContainer<BigInteger,E> getTableContainer();
 
     protected abstract Set<String> getFilterProperties();
 

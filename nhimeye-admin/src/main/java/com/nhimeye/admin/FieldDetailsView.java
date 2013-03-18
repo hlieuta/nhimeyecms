@@ -21,14 +21,16 @@ import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.*;
+import com.vaadin.data.validator.BeanValidator;
+import com.vaadin.ui.ComboBox;
+import com.vaadin.ui.FormLayout;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
 
-import java.util.Arrays;
-import java.util.Collection;
 
 public class FieldDetailsView extends FormLayout {
 
-    private FieldGroup fieldGroup = new FieldGroup();
+    FieldGroup fieldGroup = new FieldGroup();
     private Item item;
     private BeanItemContainer<FieldType> containerForFieldTypes;
     private FieldTypeView fieldTypeView;
@@ -38,32 +40,32 @@ public class FieldDetailsView extends FormLayout {
         setWidth("35em");
         setSpacing(true);
         setMargin(true);
-        final TextField fieldName = new TextField("Field Name:");
-        final TextArea fieldDescription = new TextArea("Description:");
 
-        final ComboBox fieldType = new ComboBox("Type:");
-        fieldType.setImmediate(true);
-        fieldType.setTextInputAllowed(false);
-        fieldType.setContainerDataSource(getContainerForFieldTypes());
-        fieldType.setItemCaptionMode(AbstractSelect.ItemCaptionMode.EXPLICIT_DEFAULTS_ID);
-        fieldGroup.bind(fieldName, "name");
-        fieldGroup.bind(fieldDescription, "description");
-        fieldGroup.bind(fieldType,"fieldType");
-
-        addComponent(fieldName);
-        addComponent(fieldDescription);
-        addComponent(fieldType);
-
-        fieldType.addValueChangeListener(new Property.ValueChangeListener() {
+        fieldGroup.setItemDataSource(getItem());
+        TextField name = fieldGroup.buildAndBind("Name:","name",TextField.class);
+        name.setNullRepresentation("");
+        TextArea description = fieldGroup.buildAndBind("Description:","description",TextArea.class);
+        description.setNullRepresentation("");
+        ComboBox type = fieldGroup.buildAndBind("Field Type: ", "fieldType", ComboBox.class);
+        type.setTextInputAllowed(false);
+        type.setImmediate(true);
+        type.addValueChangeListener(new Property.ValueChangeListener() {
             @Override
             public void valueChange(Property.ValueChangeEvent event) {
                 buildChildView((FieldType) event.getProperty().getValue());
             }
         });
-        fieldGroup.setItemDataSource(getItem());
+        name.addValidator(new BeanValidator(Field.class, "name"));
+        description.addValidator(new BeanValidator(Field.class,"description"));
+        addComponent(name);
+        addComponent(description);
+        addComponent(type);
+
+
+
 
     }
-    protected Item getItem() {
+    private Item getItem() {
         return item;
     }
 
@@ -87,17 +89,19 @@ public class FieldDetailsView extends FormLayout {
 
     }
 
+    public void commit() throws FieldGroup.CommitException {
 
-    public BeanItemContainer<FieldType> getContainerForFieldTypes() {
-           if(containerForFieldTypes == null)
-           {
-            Collection<FieldType> items = Arrays.asList(FieldType.class
-                    .getEnumConstants());
-            BeanItemContainer<FieldType> container = new BeanItemContainer<FieldType>(
-                    FieldType.class, items);
-               containerForFieldTypes = container;
-           }
-            return containerForFieldTypes;
+        fieldGroup.commit();
 
     }
+
+    public Field getEntity() {
+
+        if (item != null) {
+            return ((BeanItem<Field>) item).getBean();
+        } else {
+            return null;
+        }
+    }
+
 }

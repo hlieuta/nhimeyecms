@@ -17,18 +17,31 @@ package com.nhimeye.admin;
 
 import com.nhimeye.admin.event.UnSavedChangesListener;
 import com.nhimeye.data.domain.Field;
+import com.nhimeye.data.service.FieldService;
+import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
 
+@Configurable(preConstruction = true)
 public class FieldDetailsWindow extends Window {
 
-FieldDetailsView form;
+    private FieldDetailsView form;
+
+    @Autowired
+    private FieldService fieldService;
 
     public FieldDetailsWindow(Field field) {
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setSpacing(true);
-
-        setCaption(field.getName());
+        if(field.getName() == null)
+        {
+            setCaption("New Field");
+        } else
+        {
+            setCaption("Edit: " + field.getName());
+        }
         setContent(vLayout);
         center();
         setModal(true);
@@ -58,7 +71,17 @@ FieldDetailsView form;
         ok.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                close();
+                try
+                {
+                    form.commit();
+                    fieldService.saveField(form.getEntity());
+                    close();
+                }catch (FieldGroup.CommitException e)
+                {
+                    Notification
+                            .show("Commit failed: " + e.getCause().getMessage(),
+                                    Notification.Type.TRAY_NOTIFICATION);
+                }
             }
         });
         buttonHolder.addComponent(ok);
