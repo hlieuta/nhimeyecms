@@ -1,4 +1,4 @@
-package com.nhimeye.admin;
+package com.nhimeye.admin.fieldview;
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
@@ -15,6 +15,9 @@ package com.nhimeye.admin;
  * the License.
  */
 
+import com.google.common.eventbus.EventBus;
+import com.nhimeye.admin.ConfirmWindow;
+import com.nhimeye.admin.event.NewItemAddedEvent;
 import com.nhimeye.admin.event.UnSavedChangesListener;
 import com.nhimeye.data.domain.Field;
 import com.nhimeye.data.service.FieldService;
@@ -32,7 +35,7 @@ public class FieldDetailsWindow extends Window {
     @Autowired
     private FieldService fieldService;
 
-    public FieldDetailsWindow(Field field) {
+    public FieldDetailsWindow(Field field, final EventBus eventBus) {
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setSpacing(true);
         if(field.getName() == null)
@@ -71,17 +74,10 @@ public class FieldDetailsWindow extends Window {
         ok.addClickListener(new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                try
-                {
-                    form.commit();
-                    fieldService.saveField(form.getEntity());
-                    close();
-                }catch (FieldGroup.CommitException e)
-                {
-                    Notification
-                            .show("Commit failed: " + e.getCause().getMessage(),
-                                    Notification.Type.TRAY_NOTIFICATION);
-                }
+                     if(save(eventBus))
+                     {
+                         close();
+                     }
             }
         });
         buttonHolder.addComponent(ok);
@@ -97,7 +93,10 @@ public class FieldDetailsWindow extends Window {
                     confirmWindow.addUnSavedChangesListener(new UnSavedChangesListener() {
                         @Override
                         public void buttonSaveClick() {
-                          Notification.show("Button Save clicked!");
+                          if(save(eventBus))
+                          {
+                              close();
+                          }
                         }
 
                         @Override
@@ -120,12 +119,30 @@ public class FieldDetailsWindow extends Window {
     }
 
     private boolean unSavedChanges() {
-        return true;
+        return form.fieldGroup.isModified();
     }
 
     private Component buildForm(Field field) {
         form = new FieldDetailsView(field);
         return form;
+    }
+
+    private boolean save(EventBus eventBus)
+    {
+        try
+        {
+            form.commit();
+            fieldService.saveField(form.getEntity());
+            eventBus.post(new NewItemAddedEvent());
+            return true;
+        }catch (FieldGroup.CommitException e)
+        {
+            Notification
+                    .show("Commit failed: " + e.getCause().getMessage(),
+                            Notification.Type.TRAY_NOTIFICATION);
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

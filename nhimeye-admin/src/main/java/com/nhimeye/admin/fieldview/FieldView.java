@@ -1,4 +1,4 @@
-package com.nhimeye.admin;
+package com.nhimeye.admin.fieldview;
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
@@ -15,6 +15,8 @@ package com.nhimeye.admin;
  * the License.
  */
 
+import com.google.common.eventbus.EventBus;
+import com.nhimeye.admin.AbstractEntityView;
 import com.nhimeye.data.domain.Field;
 import com.nhimeye.data.reference.FieldType;
 import com.nhimeye.data.service.FieldService;
@@ -39,8 +41,21 @@ public class FieldView extends AbstractEntityView<Field> {
     FieldService fieldService;
 
     @Override
+    protected boolean deleteItems(Set<BigInteger> selectedValues) {
+        //TODO: can not delete all by query due to current spring bug
+        for(java.math.BigInteger id : selectedValues)
+        {
+             fieldService.deleteField(container.getItem(id).getBean());
+        }
+        return true;
+    }
+
+    @Override
     protected void configureTable(Table table) {
         table.setVisibleColumns(new Object[] { "name", "description", "fieldType"});
+        table.setColumnHeader("name", "Name");
+        table.setColumnHeader("description", "Description");
+        table.setColumnHeader("fieldType","Field Type");
     }
 
     @Override
@@ -74,10 +89,30 @@ public class FieldView extends AbstractEntityView<Field> {
     }
 
     @Override
-    protected void createNewButtonClicked() {
+    protected void createNewButtonClicked(EventBus eventBus) {
         Field field = new Field();
         field.setFieldType(FieldType.TextField);
-        Window w = new FieldDetailsWindow(field);
+        Window w = new FieldDetailsWindow(field,eventBus);
+        UI.getCurrent().addWindow(w);
+        w.focus();
+    }
+
+    @Override
+    protected void refreshContainer() {
+
+        container.removeAllItems();
+        container = new BeanContainer<BigInteger,Field>(Field.class);
+        container.setBeanIdProperty("id");
+
+        for (Field entity : fieldService.findAllFields()) {
+            container.addBean(entity);
+        }
+    }
+
+    @Override
+    protected void viewDetails(BigInteger id,EventBus eventBus) {
+        Field field = container.getItem(id).getBean();
+        Window w = new FieldDetailsWindow(field,eventBus);
         UI.getCurrent().addWindow(w);
         w.focus();
     }

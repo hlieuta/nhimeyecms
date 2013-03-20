@@ -19,6 +19,7 @@ package com.nhimeye.admin;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.nhimeye.admin.event.LoginEvent;
+import com.nhimeye.admin.fieldview.FieldView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;

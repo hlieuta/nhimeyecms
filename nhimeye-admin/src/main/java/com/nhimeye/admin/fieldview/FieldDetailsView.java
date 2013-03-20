@@ -1,4 +1,5 @@
-package com.nhimeye.admin;/*
+package com.nhimeye.admin.fieldview;
+/*
  * Copyright 2013 NHIMEYE Inc.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
@@ -46,7 +47,7 @@ public class FieldDetailsView extends FormLayout {
         name.setNullRepresentation("");
         TextArea description = fieldGroup.buildAndBind("Description:","description",TextArea.class);
         description.setNullRepresentation("");
-        ComboBox type = fieldGroup.buildAndBind("Field Type: ", "fieldType", ComboBox.class);
+        ComboBox type = fieldGroup.buildAndBind("Field type: ", "fieldType", ComboBox.class);
         type.setTextInputAllowed(false);
         type.setImmediate(true);
         type.addValueChangeListener(new Property.ValueChangeListener() {
@@ -55,14 +56,21 @@ public class FieldDetailsView extends FormLayout {
                 buildChildView((FieldType) event.getProperty().getValue());
             }
         });
+
         name.addValidator(new BeanValidator(Field.class, "name"));
         description.addValidator(new BeanValidator(Field.class,"description"));
+
         addComponent(name);
         addComponent(description);
         addComponent(type);
 
+        if(field.getId() != null && field.getName() != null)
+        {
+            name.setEnabled(false);
+            type.setEnabled(false);
+        }
 
-
+        buildChildView(field.getFieldType());
 
     }
     private Item getItem() {

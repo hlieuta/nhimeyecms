@@ -1,4 +1,4 @@
-package com.nhimeye.admin;
+package com.nhimeye.admin.fieldview;
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
@@ -27,8 +27,8 @@ public class TextFieldView extends FieldTypeView{
 
     TextFieldView(FieldDetailsView detailsView) {
         super(detailsView);
-        maxLength = detailsView.fieldGroup.buildAndBind("Max Length:","maxLength");
-        defaultValue = detailsView.fieldGroup.buildAndBind("Default Value:","defaultValue",TextField.class);
+        maxLength = detailsView.fieldGroup.buildAndBind("Max length:","maxLength");
+        defaultValue = detailsView.fieldGroup.buildAndBind("Default value:","defaultValue",TextField.class);
         defaultValue.setNullRepresentation("");
         maxLength.addValidator(new BeanValidator(Field.class,"maxLength"));
         defaultValue.addValidator(new Validator() {
@@ -50,10 +50,9 @@ public class TextFieldView extends FieldTypeView{
 
     @Override
     public void removeComponents() {
-        detailsView.fieldGroup.unbind(maxLength);
-        detailsView.fieldGroup.unbind(defaultValue);
-        detailsView.removeComponent(maxLength);
-        detailsView.removeComponent(defaultValue);
-
+            detailsView.fieldGroup.unbind(maxLength);
+            detailsView.fieldGroup.unbind(defaultValue);
+            detailsView.removeComponent(maxLength);
+            detailsView.removeComponent(defaultValue);
     }
 }

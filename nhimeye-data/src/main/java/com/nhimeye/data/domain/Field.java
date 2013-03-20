@@ -24,8 +24,10 @@ public class Field {
     @Size(max = 255)
     private String description;
 
+    @NotNull
     private int min;
 
+    @NotNull
     private int max;
     
     private String defaultValue;

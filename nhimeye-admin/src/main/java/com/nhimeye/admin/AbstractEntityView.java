@@ -17,8 +17,13 @@ package com.nhimeye.admin;
  */
 
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+import com.nhimeye.admin.event.ConfirmDeleteListener;
+import com.nhimeye.admin.event.NewItemAddedEvent;
 import com.vaadin.data.Container.Filter;
 import com.vaadin.data.Item;
+import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.event.Action;
 import com.vaadin.event.Action.Handler;
@@ -30,19 +35,19 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.ui.*;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
-import org.springframework.beans.factory.annotation.Configurable;
 
 import java.math.BigInteger;
 import java.util.Set;
 
-@Configurable(preConstruction = true)
 public abstract class AbstractEntityView<E> extends VerticalLayout implements View {
 
     private Table table;
+    private final EventBus eventBus = new EventBus();
+    private Set<java.math.BigInteger> selectedValues = null;
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
-
+        eventBus.register(this);
         setSizeFull();
         addStyleName("abstract");
 
@@ -77,15 +82,12 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
                                 || event.getText().equals("")) {
                             return true;
                         }
-                         Set<String> properties = getFilterProperties();
-                        if(properties != null)
-                        {
-                            for(String propertyId : properties)
-                            {
-                                    boolean match = filterByProperty(propertyId, item,
-                                            event.getText());
-                                if(match)
-                                {
+                        Set<String> properties = getFilterProperties();
+                        if (properties != null) {
+                            for (String propertyId : properties) {
+                                boolean match = filterByProperty(propertyId, item,
+                                        event.getText());
+                                if (match) {
                                     return true;
                                 }
                             }
@@ -96,11 +98,9 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
                     @Override
                     public boolean appliesToProperty(Object propertyId) {
                         Set<String> properties = getFilterProperties();
-                        if(properties != null)
-                        {
-                            for(String cid : properties)
-                            {
-                                if(cid.equals(propertyId))
+                        if (properties != null) {
+                            for (String cid : properties) {
+                                if (cid.equals(propertyId))
                                     return true;
 
                             }
@@ -125,19 +125,18 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
         toolbar.setComponentAlignment(filter, Alignment.MIDDLE_LEFT);
 
 
-
-        final Button newReport = new Button("Create new");
-        newReport.addClickListener(new ClickListener() {
+        final Button buttonCreateNew = new Button("Create new");
+        buttonCreateNew.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
-                createNewButtonClicked();
+                createNewButtonClicked(eventBus);
 
             }
         });
-        newReport.setEnabled(true);
-        newReport.addStyleName("small");
-        toolbar.addComponent(newReport);
-        toolbar.setComponentAlignment(newReport, Alignment.MIDDLE_LEFT);
+        buttonCreateNew.setEnabled(true);
+        buttonCreateNew.addStyleName("small");
+        toolbar.addComponent(buttonCreateNew);
+        toolbar.setComponentAlignment(buttonCreateNew, Alignment.MIDDLE_LEFT);
 
         addComponent(getTable());
         setExpandRatio(getTable(), 1);
@@ -145,16 +144,42 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
         getTable().addActionHandler(new Handler() {
 
             private Action edit = new Action("Edit details");
-
             private Action deleted = new Action("Delete selected");
 
 
             @Override
             public void handleAction(Action action, Object sender, Object target) {
                 if (action == edit) {
-                    Notification.show("Not implemented in this demo");
+                    if(selectedValues.size() == 1)
+                    {
+                        viewDetails(selectedValues.iterator().next(),eventBus);
+                    }else
+                    {
+                        Notification.show("Please select an item to edit details.", Notification.Type.ERROR_MESSAGE);
+                    }
+
                 } else if (action == deleted) {
-                    Notification.show("Not implemented in this demo");
+                    if (selectedValues != null && selectedValues.size() > 0) {
+
+                        ConfirmWindow confirmWindow = new ConfirmWindow("Delete Confirm", "Are you sure you want to delete the selected item?", ConfirmWindow.Type.DeleteConfirm);
+                        getUI().addWindow(confirmWindow);
+                        confirmWindow.addConfirmDeleteListener(new ConfirmDeleteListener() {
+                            @Override
+                            public void buttonDeleteClick() {
+                                try {
+                                    if (deleteItems(selectedValues)) {
+                                        refreshTableData();
+                                    }
+                                } catch (Exception ex) {
+                                    Notification.show("Can not delete the selected item. Please contact your system administrator", Notification.Type.ERROR_MESSAGE);
+                                    ex.printStackTrace();
+                                }
+                            }
+                        });
+
+
+                    }
+
                 }
             }
 
@@ -164,9 +189,24 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
             }
         });
 
-       getTable().setImmediate(true);
+        getTable().setImmediate(true);
+
+        getTable().addValueChangeListener(new Property.ValueChangeListener() {
+
+            @Override
+            public void valueChange(Property.ValueChangeEvent event) {
+                selectedValues = (Set<java.math.BigInteger>) event
+                        .getProperty().getValue();
+            }
+        });
 
 
+    }
+
+    private void refreshTableData() {
+        refreshContainer();
+        getTable().setContainerDataSource(getTableContainer());
+        configureTable(getTable());
     }
 
     private boolean filterByProperty(String prop, Item item, String text) {
@@ -180,7 +220,6 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
 
         return false;
     }
-
 
 
     protected Table getTable() {
@@ -197,13 +236,25 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
         return table;
     }
 
+    @Subscribe
+    public void onNewItemAdded(NewItemAddedEvent event) {
+        refreshTableData();
+
+    }
+
     protected abstract void configureTable(Table table);
 
     protected abstract Label getTitle();
 
-    protected abstract BeanContainer<BigInteger,E> getTableContainer();
+    protected abstract BeanContainer<BigInteger, E> getTableContainer();
 
     protected abstract Set<String> getFilterProperties();
 
-    protected abstract void createNewButtonClicked();
+    protected abstract void createNewButtonClicked(EventBus eventBus);
+
+    protected abstract void refreshContainer();
+
+    protected abstract void viewDetails(BigInteger id,EventBus eventBus);
+
+    protected abstract boolean deleteItems(Set<BigInteger> selectedValues);
 }

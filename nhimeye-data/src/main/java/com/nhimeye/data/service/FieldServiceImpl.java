@@ -1,23 +1,10 @@
 package com.nhimeye.data.service;
 
-import java.util.List;
-
-import com.nhimeye.data.domain.Field;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 public class FieldServiceImpl implements FieldService {
 
-    @Override
-    public long countAllFields(String filter) {
-        return fieldRepository.count();
-    }
-
-
-    @Override
-    public List<Field> findAllFields(String filter, int firstResult,
-            int pageSize) {
-        return fieldRepository.findAll(new org.springframework.data.domain.PageRequest(firstResult / pageSize, pageSize)).getContent();
-    }
-
-
+    @Autowired
+    MongoTemplate mongoTemplate;
 }
