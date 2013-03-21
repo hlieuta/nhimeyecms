@@ -24,6 +24,8 @@ import com.nhimeye.data.service.FieldService;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.ui.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -31,6 +33,7 @@ import org.springframework.beans.factory.annotation.Configurable;
 public class FieldDetailsWindow extends Window {
 
     private FieldDetailsView form;
+    private static final Logger LOGGER = LoggerFactory.getLogger(FieldDetailsWindow.class);
 
     @Autowired
     private FieldService fieldService;
@@ -140,7 +143,10 @@ public class FieldDetailsWindow extends Window {
             Notification
                     .show("Commit failed: " + e.getCause().getMessage(),
                             Notification.Type.TRAY_NOTIFICATION);
-            e.printStackTrace();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug(e.getMessage(),e);
+            }
+
         }
         return false;
     }

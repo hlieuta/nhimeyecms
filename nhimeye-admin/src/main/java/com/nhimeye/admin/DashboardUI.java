@@ -34,6 +34,8 @@ import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.MenuBar.Command;
 import com.vaadin.ui.MenuBar.MenuItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -50,6 +52,7 @@ public class DashboardUI extends UI {
 
     private final EventBus bus = new EventBus();
     private static final long serialVersionUID = 1L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DashboardUI.class);
 
     CssLayout root = new CssLayout();
 
@@ -67,7 +70,6 @@ public class DashboardUI extends UI {
             put("/recordtypes", DashboardView.class);
             put("/fields", FieldView.class);
             put("/users", DashboardView.class);
-            put("/roles", DashboardView.class);
 
         }
     };
@@ -206,7 +208,7 @@ public class DashboardUI extends UI {
         menu.removeAllComponents();
 
         for (final String view : new String[] { "dashboard", "articles",
-                "documents", "recordtypes","fields","users","roles" }) {
+                "documents", "recordtypes","fields","users"}) {
             final Button b = new NativeButton(view.substring(0, 1).toUpperCase()
                     + view.substring(1).replace('-', ' '));
             b.addStyleName("icon-" + view);

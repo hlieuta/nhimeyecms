@@ -1,13 +1,22 @@
 package com.nhimeye.data.service;
 
-import java.util.List;
-
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-
 import com.nhimeye.data.domain.User;
+import com.nhimeye.data.domain.UserDetailsAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.dao.SaltSource;
+import org.springframework.security.authentication.encoding.PasswordEncoder;
 
 public class UserServiceImpl implements UserService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private SaltSource saltSource;
 
     @Override
     public User findByUserName(String username) {
@@ -16,13 +25,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public long countAllUsers(String filter) {
-        return userRepository.count();
+    public void addUser(User user) {
+        UserDetailsAdapter userDetails = new UserDetailsAdapter(user);
+        String password = userDetails.getPassword();
+        Object salt = saltSource.getSalt(userDetails);
+        user.setPassword(passwordEncoder.encodePassword(password, salt));
+        saveUser(user);
     }
 
-    @Override
-    public List<User> findAllUsers(String filter, int firstResult, int pageSize) {
-        Pageable pageSpecification = new PageRequest(firstResult, pageSize);
-        return userRepository.findAll(pageSpecification).getContent();
-    }
 }

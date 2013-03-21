@@ -1,17 +1,13 @@
 package com.nhimeye.data.service;
 
-import java.util.List;
-
-import org.springframework.roo.addon.layers.service.RooService;
-
 import com.nhimeye.data.domain.User;
+import org.springframework.roo.addon.layers.service.RooService;
 
 @RooService(domainTypes = { com.nhimeye.data.domain.User.class })
 public interface UserService {
 
-    User findByUserName(String string);
+    User findByUserName(String username);
 
-    long countAllUsers(String filter);
+    void addUser(User user);
 
-    List<User> findAllUsers(String filter, int firstResult, int pageSize);
 }

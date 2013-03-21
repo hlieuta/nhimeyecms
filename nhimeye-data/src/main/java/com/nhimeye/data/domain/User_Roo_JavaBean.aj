@@ -4,7 +4,6 @@
 package com.nhimeye.data.domain;
 
 import com.nhimeye.data.domain.User;
-import com.nhimeye.data.reference.UserProvider;
 
 privileged aspect User_Roo_JavaBean {
     
@@ -62,14 +61,6 @@ privileged aspect User_Roo_JavaBean {
     
     public void User.setActive(Boolean active) {
         this.active = active;
-    }
-    
-    public UserProvider User.getProvider() {
-        return this.provider;
-    }
-    
-    public void User.setProvider(UserProvider provider) {
-        this.provider = provider;
     }
     
 }

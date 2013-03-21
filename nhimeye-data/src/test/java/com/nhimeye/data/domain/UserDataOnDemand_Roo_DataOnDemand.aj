@@ -5,7 +5,6 @@ package com.nhimeye.data.domain;
 
 import com.nhimeye.data.domain.User;
 import com.nhimeye.data.domain.UserDataOnDemand;
-import com.nhimeye.data.reference.UserProvider;
 import com.nhimeye.data.service.UserService;
 import java.math.BigInteger;
 import java.security.SecureRandom;
@@ -37,7 +36,6 @@ privileged aspect UserDataOnDemand_Roo_DataOnDemand {
         setLastName(obj, index);
         setPassword(obj, index);
         setPhone(obj, index);
-        setProvider(obj, index);
         setUserName(obj, index);
         return obj;
     }
@@ -70,8 +68,8 @@ privileged aspect UserDataOnDemand_Roo_DataOnDemand {
     
     public void UserDataOnDemand.setPassword(User obj, int index) {
         String password = "password_" + index;
-        if (password.length() > 16) {
-            password = password.substring(0, 16);
+        if (password.length() > 128) {
+            password = password.substring(0, 128);
         }
         obj.setPassword(password);
     }
@@ -82,11 +80,6 @@ privileged aspect UserDataOnDemand_Roo_DataOnDemand {
             phone = phone.substring(0, 15);
         }
         obj.setPhone(phone);
-    }
-    
-    public void UserDataOnDemand.setProvider(User obj, int index) {
-        UserProvider provider = UserProvider.class.getEnumConstants()[0];
-        obj.setProvider(provider);
     }
     
     public void UserDataOnDemand.setUserName(User obj, int index) {

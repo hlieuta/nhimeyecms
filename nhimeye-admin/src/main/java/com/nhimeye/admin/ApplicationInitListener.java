@@ -15,6 +15,9 @@
  */
 package com.nhimeye.admin;
 
+import com.nhimeye.data.domain.User;
+import com.nhimeye.data.service.FieldService;
+import com.nhimeye.data.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -22,13 +25,6 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.nhimeye.data.domain.User;
-import com.nhimeye.data.reference.UserProvider;
-import com.nhimeye.data.service.FieldService;
-import com.nhimeye.data.service.PermissionSectionService;
-import com.nhimeye.data.service.RoleService;
-import com.nhimeye.data.service.UserService;
 
 @Component
 public class ApplicationInitListener implements
@@ -42,13 +38,7 @@ public class ApplicationInitListener implements
     FieldService fileService;
 
     @Autowired
-    PermissionSectionService permissionSectionService;
-
-    @Autowired
     UserService userService;
-
-    @Autowired
-    RoleService roleService;
 
     @Autowired
     ApplicationContext ctx;
@@ -66,10 +56,9 @@ public class ApplicationInitListener implements
             defaultUser.setFirstName("System");
             defaultUser.setLastName("User");
             defaultUser.setUserName("system");
-            defaultUser.setPassword("system");
+            defaultUser.setPassword("password");
             defaultUser.setEmail("system@nhimeye.com");
-            defaultUser.setProvider(UserProvider.LocalSystem);
-            userService.saveUser(defaultUser);
+            userService.addUser(defaultUser);
             logger.info("Done.");
         }
 

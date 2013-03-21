@@ -22,12 +22,13 @@ import com.vaadin.ui.TextField;
 
 public class TextFieldView extends FieldTypeView{
 
-    com.vaadin.ui.Field<?> maxLength = null;
-    TextField defaultValue;
+   private TextField maxLength = null;
+   private  TextField defaultValue;
 
     TextFieldView(FieldDetailsView detailsView) {
         super(detailsView);
-        maxLength = detailsView.fieldGroup.buildAndBind("Max length:","maxLength");
+        maxLength = detailsView.fieldGroup.buildAndBind("Max length:","maxLength",TextField.class);
+        maxLength.setConverter(Integer.class);
         defaultValue = detailsView.fieldGroup.buildAndBind("Default value:","defaultValue",TextField.class);
         defaultValue.setNullRepresentation("");
         maxLength.addValidator(new BeanValidator(Field.class,"maxLength"));
@@ -36,7 +37,7 @@ public class TextFieldView extends FieldTypeView{
             public void validate(Object value) throws InvalidValueException {
                 if(maxLength != null)
                 {
-                    final int length = Integer.parseInt(maxLength.getValue().toString());
+                    final Integer length = (Integer) maxLength.getConvertedValue();
                     if(length> 0 && length < defaultValue.getValue().toString().length())
                     {
                         throw new InvalidValueException("Default Value can no be grater than Max Length.");
