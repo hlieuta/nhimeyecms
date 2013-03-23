@@ -92,9 +92,8 @@ public class FieldView extends AbstractEntityView<Field> {
     protected void createNewButtonClicked(EventBus eventBus) {
         Field field = new Field();
         field.setFieldType(FieldType.TextField);
-        Window w = new FieldDetailsWindow(field,eventBus);
-        UI.getCurrent().addWindow(w);
-        w.focus();
+        showWindow(field,eventBus);
+
     }
 
     @Override
@@ -112,6 +111,11 @@ public class FieldView extends AbstractEntityView<Field> {
     @Override
     protected void viewDetails(BigInteger id,EventBus eventBus) {
         Field field = container.getItem(id).getBean();
+        showWindow(field,eventBus);
+    }
+
+    private void showWindow(Field field,EventBus eventBus)
+    {
         Window w = new FieldDetailsWindow(field,eventBus);
         UI.getCurrent().addWindow(w);
         w.focus();

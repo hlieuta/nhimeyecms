@@ -47,14 +47,6 @@ privileged aspect User_Roo_JavaBean {
         this.email = email;
     }
     
-    public String User.getPhone() {
-        return this.phone;
-    }
-    
-    public void User.setPhone(String phone) {
-        this.phone = phone;
-    }
-    
     public Boolean User.getActive() {
         return this.active;
     }

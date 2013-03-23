@@ -35,7 +35,6 @@ privileged aspect UserDataOnDemand_Roo_DataOnDemand {
         setFirstName(obj, index);
         setLastName(obj, index);
         setPassword(obj, index);
-        setPhone(obj, index);
         setUserName(obj, index);
         return obj;
     }
@@ -72,14 +71,6 @@ privileged aspect UserDataOnDemand_Roo_DataOnDemand {
             password = password.substring(0, 128);
         }
         obj.setPassword(password);
-    }
-    
-    public void UserDataOnDemand.setPhone(User obj, int index) {
-        String phone = "phone_" + index;
-        if (phone.length() > 15) {
-            phone = phone.substring(0, 15);
-        }
-        obj.setPhone(phone);
     }
     
     public void UserDataOnDemand.setUserName(User obj, int index) {

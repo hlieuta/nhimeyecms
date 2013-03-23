@@ -150,7 +150,7 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
             @Override
             public void handleAction(Action action, Object sender, Object target) {
                 if (action == edit) {
-                    if(selectedValues.size() == 1)
+                    if(selectedValues != null && selectedValues.size() == 1)
                     {
                         viewDetails(selectedValues.iterator().next(),eventBus);
                     }else

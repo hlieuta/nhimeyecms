@@ -34,9 +34,6 @@ public class User {
     @Pattern(regexp = "[a-zA-Z0-9]+@[a-zA-Z0-9]+\\.[a-zA-Z0-9]+")
     private String email;
 
-    @Size(max = 15)
-    private String phone;
-
     @NotNull
     private Boolean active;
 

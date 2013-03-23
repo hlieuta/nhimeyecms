@@ -86,6 +86,9 @@ public class NumberFieldView extends FieldTypeView {
 
     @Override
     public void removeComponents() {
+        detailsView.fieldGroup.unbind(maxValue);
+        detailsView.fieldGroup.unbind(minValue);
+        detailsView.fieldGroup.unbind(defaultValue);
         detailsView.removeComponent(maxValue);
         detailsView.removeComponent(minValue);
         detailsView.removeComponent(defaultValue);
