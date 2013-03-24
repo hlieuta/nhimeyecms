@@ -1,4 +1,5 @@
 package com.nhimeye.admin.fieldview;
+
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
@@ -21,7 +22,6 @@ import com.vaadin.data.Item;
 import com.vaadin.data.Property;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.data.util.BeanItem;
-import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.ui.ComboBox;
 import com.vaadin.ui.FormLayout;
@@ -33,7 +33,6 @@ public class FieldDetailsView extends FormLayout {
 
     FieldGroup fieldGroup = new FieldGroup();
     private Item item;
-    private BeanItemContainer<FieldType> containerForFieldTypes;
     private FieldTypeView fieldTypeView;
     public FieldDetailsView(Field field)
     {
@@ -86,11 +85,13 @@ public class FieldDetailsView extends FormLayout {
                 fieldTypeView = new TextFieldView(this);
                 break;
             case RichTextArea:
+                fieldTypeView = new TextAreaFieldView(this);
                 break;
             case NumberField:
                 fieldTypeView = new NumberFieldView(this);
                 break;
             case EmailField:
+                fieldTypeView = new EmailFieldView(this);
                 break;
 
         }

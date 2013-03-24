@@ -22,6 +22,8 @@ import com.nhimeye.data.service.UserService;
 import com.vaadin.data.util.BeanContainer;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.Window;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -81,7 +83,9 @@ public class UserView extends AbstractEntityView<User> {
 
     @Override
     protected void createNewButtonClicked(EventBus eventBus) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        User user = new User();
+        user.setActive(true);
+        showWindow(user,eventBus);
     }
 
     @Override
@@ -97,7 +101,8 @@ public class UserView extends AbstractEntityView<User> {
 
     @Override
     protected void viewDetails(BigInteger id, EventBus eventBus) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        User user = container.getItem(id).getBean();
+        showWindow(user,eventBus);
     }
 
     @Override
@@ -106,5 +111,12 @@ public class UserView extends AbstractEntityView<User> {
             userService.deleteUser(container.getItem(id).getBean());
         }
         return true;
+    }
+
+    private void showWindow(User user,EventBus eventBus)
+    {
+        Window w = new UserDetailsWindow(user,eventBus);
+        UI.getCurrent().addWindow(w);
+        w.focus();
     }
 }
