@@ -14,10 +14,10 @@ package com.nhimeye.admin;/*
  * the License.
  */
 
-public abstract class FieldTypeView{
+public abstract class FieldTypeEditor {
 
     FieldDetailsView detailsView;
-    FieldTypeView(FieldDetailsView detailsView)
+    FieldTypeEditor(FieldDetailsView detailsView)
     {
         this.detailsView = detailsView;
     }

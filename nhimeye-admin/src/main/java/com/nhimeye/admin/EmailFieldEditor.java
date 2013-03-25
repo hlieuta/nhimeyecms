@@ -22,7 +22,7 @@ import com.vaadin.ui.TextField;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class EmailFieldView extends FieldTypeView {
+public class EmailFieldEditor extends FieldTypeEditor {
     TextField defaultValue;
     private Pattern pattern;
     private Matcher matcher;
@@ -30,7 +30,7 @@ public class EmailFieldView extends FieldTypeView {
             "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
                     + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
 
-    EmailFieldView(FieldDetailsView detailsView) {
+    EmailFieldEditor(FieldDetailsView detailsView) {
         super(detailsView);
         pattern = Pattern.compile(EMAIL_PATTERN);
         defaultValue = detailsView.fieldGroup.buildAndBind("Default value:", "defaultValue", TextField.class);

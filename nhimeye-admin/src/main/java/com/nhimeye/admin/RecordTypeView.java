@@ -95,6 +95,10 @@ public class RecordTypeView extends AbstractEntityView<RecordType> {
 
     @Override
     protected boolean deleteItems(Set<BigInteger> selectedValues) {
-        return false;
+       for(BigInteger id : selectedValues)
+       {
+           recordTypeService.deleteRecordType(container.getItem(id).getBean());
+       }
+        return true;
     }
 }

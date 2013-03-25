@@ -23,11 +23,11 @@ import com.vaadin.ui.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class AbstractEntityWindow<E> extends Window {
+public abstract class AbstractEntityEditor<E> extends Window {
 
-    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntityWindow.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractEntityEditor.class);
 
-    public AbstractEntityWindow(E entity, final EventBus eventBus) {
+    public AbstractEntityEditor(E entity, final EventBus eventBus) {
         VerticalLayout vLayout = new VerticalLayout();
         vLayout.setSpacing(true);
         setContent(vLayout);

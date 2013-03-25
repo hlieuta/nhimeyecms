@@ -1,4 +1,11 @@
 package com.nhimeye.admin;
+
+import com.nhimeye.data.domain.Field;
+import com.vaadin.data.Validator;
+import com.vaadin.data.validator.BeanValidator;
+import com.vaadin.ui.TextArea;
+import com.vaadin.ui.TextField;
+
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
@@ -14,22 +21,16 @@ package com.nhimeye.admin;
  * License for the specific language governing permissions and limitations under
  * the License.
  */
+public class TextAreaFieldEditor extends FieldTypeEditor {
 
-import com.nhimeye.data.domain.Field;
-import com.vaadin.data.Validator;
-import com.vaadin.data.validator.BeanValidator;
-import com.vaadin.ui.TextField;
+    private TextField maxLength = null;
+    private TextArea defaultValue;
 
-public class TextFieldView extends FieldTypeView{
-
-   private TextField maxLength = null;
-   private  TextField defaultValue;
-
-    TextFieldView(FieldDetailsView detailsView) {
+    TextAreaFieldEditor(FieldDetailsView detailsView) {
         super(detailsView);
         maxLength = detailsView.fieldGroup.buildAndBind("Max length:","maxLength",TextField.class);
         maxLength.setConverter(Integer.class);
-        defaultValue = detailsView.fieldGroup.buildAndBind("Default value:","defaultValue",TextField.class);
+        defaultValue = detailsView.fieldGroup.buildAndBind("Default value:","defaultValue",TextArea.class);
         defaultValue.setNullRepresentation("");
         maxLength.addValidator(new BeanValidator(Field.class,"maxLength"));
         defaultValue.addValidator(new Validator() {
@@ -51,9 +52,9 @@ public class TextFieldView extends FieldTypeView{
 
     @Override
     public void removeComponents() {
-            detailsView.fieldGroup.unbind(maxLength);
-            detailsView.fieldGroup.unbind(defaultValue);
-            detailsView.removeComponent(maxLength);
-            detailsView.removeComponent(defaultValue);
+        detailsView.fieldGroup.unbind(maxLength);
+        detailsView.fieldGroup.unbind(defaultValue);
+        detailsView.removeComponent(maxLength);
+        detailsView.removeComponent(defaultValue);
     }
 }

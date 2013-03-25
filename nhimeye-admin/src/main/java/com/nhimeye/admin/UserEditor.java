@@ -17,7 +17,6 @@ package com.nhimeye.admin;
  */
 
 import com.google.common.eventbus.EventBus;
-import com.nhimeye.admin.AbstractEntityWindow;
 import com.nhimeye.admin.event.NewItemAddedEvent;
 import com.nhimeye.data.domain.User;
 import com.nhimeye.data.service.UserService;
@@ -30,7 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable(preConstruction = true)
-public class UserDetailsWindow extends AbstractEntityWindow<User> {
+public class UserEditor extends AbstractEntityEditor<User> {
 
     FormLayout formLayout;
     FieldGroup fieldGroup;
@@ -39,7 +38,7 @@ public class UserDetailsWindow extends AbstractEntityWindow<User> {
     @Autowired
     UserService userService;
 
-    public UserDetailsWindow(User entity, EventBus eventBus) {
+    public UserEditor(User entity, EventBus eventBus) {
         super(entity, eventBus);
         if(entity.getUserName() == null)
         {

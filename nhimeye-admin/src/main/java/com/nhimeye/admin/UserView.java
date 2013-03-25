@@ -114,7 +114,7 @@ public class UserView extends AbstractEntityView<User> {
 
     private void showWindow(User user,EventBus eventBus)
     {
-        Window w = new UserDetailsWindow(user,eventBus);
+        Window w = new UserEditor(user,eventBus);
         UI.getCurrent().addWindow(w);
         w.focus();
     }

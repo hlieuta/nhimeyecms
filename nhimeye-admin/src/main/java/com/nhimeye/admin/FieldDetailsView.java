@@ -33,7 +33,7 @@ public class FieldDetailsView extends FormLayout {
 
     FieldGroup fieldGroup = new FieldGroup();
     private Item item;
-    private FieldTypeView fieldTypeView;
+    private FieldTypeEditor fieldTypeView;
     public FieldDetailsView(Field field)
     {
         item = new BeanItem<Field>(field);
@@ -82,16 +82,16 @@ public class FieldDetailsView extends FormLayout {
            fieldTypeView.removeComponents();
         switch (type) {
             case TextField:
-                fieldTypeView = new TextFieldView(this);
+                fieldTypeView = new TextFieldEditor(this);
                 break;
             case RichTextArea:
-                fieldTypeView = new TextAreaFieldView(this);
+                fieldTypeView = new TextAreaFieldEditor(this);
                 break;
             case NumberField:
-                fieldTypeView = new NumberFieldView(this);
+                fieldTypeView = new NumberFieldEditor(this);
                 break;
             case EmailField:
-                fieldTypeView = new EmailFieldView(this);
+                fieldTypeView = new EmailFieldEditor(this);
                 break;
 
         }

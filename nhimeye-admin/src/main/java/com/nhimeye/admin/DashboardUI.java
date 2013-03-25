@@ -65,7 +65,7 @@ public class DashboardUI extends UI {
 
             put("/dashboard", DashboardView.class);
             put("/articles", DashboardView.class);
-            put("/documents", DashboardView.class);
+            put("/documents", ReportsView.class);
             put("/recordtypes", RecordTypeView.class);
             put("/fields", FieldView.class);
             put("/users", UserView.class);

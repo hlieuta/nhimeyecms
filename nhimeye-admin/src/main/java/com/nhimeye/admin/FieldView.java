@@ -114,7 +114,7 @@ public class FieldView extends AbstractEntityView<Field> {
 
     private void showWindow(Field field,EventBus eventBus)
     {
-        Window w = new FieldDetailsWindow(field,eventBus);
+        Window w = new FieldEditor(field,eventBus);
         UI.getCurrent().addWindow(w);
         w.focus();
     }

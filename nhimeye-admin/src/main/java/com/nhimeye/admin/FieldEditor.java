@@ -26,14 +26,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
 @Configurable(preConstruction = true)
-public class FieldDetailsWindow extends AbstractEntityWindow<Field> {
+public class FieldEditor extends AbstractEntityEditor<Field> {
 
     private FieldDetailsView form;
 
     @Autowired
     private FieldService fieldService;
 
-    public FieldDetailsWindow(Field entity, EventBus eventBus) {
+    public FieldEditor(Field entity, EventBus eventBus) {
         super(entity, eventBus);
         if(entity.getName() == null)
         {

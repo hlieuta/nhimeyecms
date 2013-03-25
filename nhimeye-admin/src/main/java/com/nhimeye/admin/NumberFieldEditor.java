@@ -19,13 +19,13 @@ package com.nhimeye.admin;
 import com.vaadin.data.Validator;
 import com.vaadin.ui.TextField;
 
-public class NumberFieldView extends FieldTypeView {
+public class NumberFieldEditor extends FieldTypeEditor {
 
     TextField maxValue;
     TextField minValue;
     TextField defaultValue;
 
-    public NumberFieldView(FieldDetailsView detailsView) {
+    public NumberFieldEditor(FieldDetailsView detailsView) {
         super(detailsView);
         maxValue = detailsView.fieldGroup.buildAndBind("Max value:", "max", TextField.class);
         maxValue.setConverter(Integer.class);
