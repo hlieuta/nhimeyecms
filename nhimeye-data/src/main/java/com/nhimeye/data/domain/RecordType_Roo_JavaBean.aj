@@ -26,14 +26,6 @@ privileged aspect RecordType_Roo_JavaBean {
         this.description = description;
     }
     
-    public BigInteger RecordType.getIconId() {
-        return this.iconId;
-    }
-    
-    public void RecordType.setIconId(BigInteger iconId) {
-        this.iconId = iconId;
-    }
-    
     public Type RecordType.getType() {
         return this.type;
     }

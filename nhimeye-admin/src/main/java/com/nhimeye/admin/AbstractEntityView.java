@@ -45,6 +45,8 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
     private final EventBus eventBus = new EventBus();
     private Set<java.math.BigInteger> selectedValues = null;
 
+    protected BeanContainer<BigInteger, E> container;
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
         eventBus.register(this);

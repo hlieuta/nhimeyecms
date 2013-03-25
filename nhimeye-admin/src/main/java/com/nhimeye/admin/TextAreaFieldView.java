@@ -1,4 +1,4 @@
-package com.nhimeye.admin.fieldview;
+package com.nhimeye.admin;
 
 import com.nhimeye.data.domain.Field;
 import com.vaadin.data.Validator;

@@ -19,8 +19,6 @@ package com.nhimeye.admin;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 import com.nhimeye.admin.event.LoginEvent;
-import com.nhimeye.admin.fieldview.FieldView;
-import com.nhimeye.admin.userview.UserView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
@@ -68,7 +66,7 @@ public class DashboardUI extends UI {
             put("/dashboard", DashboardView.class);
             put("/articles", DashboardView.class);
             put("/documents", DashboardView.class);
-            put("/recordtypes", DashboardView.class);
+            put("/recordtypes", RecordTypeView.class);
             put("/fields", FieldView.class);
             put("/users", UserView.class);
 

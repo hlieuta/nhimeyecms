@@ -127,11 +127,6 @@
             <artifactId>nhimeye-data</artifactId>
             <version>0.1.0.BUILD-SNAPSHOT</version>
         </dependency>
-        <dependency>
-            <groupId>com.nhimeye.security</groupId>
-            <artifactId>nhimeye-security</artifactId>
-            <version>0.1.0.BUILD-SNAPSHOT</version>
-        </dependency>
 		<dependency>
 			<groupId>com.vaadin</groupId>
 			<artifactId>vaadin-server</artifactId>

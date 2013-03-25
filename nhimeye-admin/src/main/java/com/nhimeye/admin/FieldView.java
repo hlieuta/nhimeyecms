@@ -1,4 +1,4 @@
-package com.nhimeye.admin.fieldview;
+package com.nhimeye.admin;
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
@@ -16,7 +16,6 @@ package com.nhimeye.admin.fieldview;
  */
 
 import com.google.common.eventbus.EventBus;
-import com.nhimeye.admin.AbstractEntityView;
 import com.nhimeye.data.domain.Field;
 import com.nhimeye.data.reference.FieldType;
 import com.nhimeye.data.service.FieldService;
@@ -35,7 +34,6 @@ import java.util.Set;
 @Configurable(preConstruction = true)
 public class FieldView extends AbstractEntityView<Field> {
 
-    BeanContainer<BigInteger,Field>   container;
 
     @Autowired
     FieldService fieldService;

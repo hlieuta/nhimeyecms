@@ -1,7 +1,6 @@
-package com.nhimeye.security;
+package com.nhimeye.data.service;
 
 import com.nhimeye.data.domain.UserDetailsAdapter;
-import com.nhimeye.data.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,8 +14,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserService userService;
-    @Autowired
-    private Assembler assembler;
 
     @Override
     @Transactional(readOnly = true)

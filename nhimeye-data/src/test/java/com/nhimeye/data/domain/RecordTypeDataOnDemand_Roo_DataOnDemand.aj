@@ -32,7 +32,6 @@ privileged aspect RecordTypeDataOnDemand_Roo_DataOnDemand {
     public RecordType RecordTypeDataOnDemand.getNewTransientRecordType(int index) {
         RecordType obj = new RecordType();
         setDescription(obj, index);
-        setIconId(obj, index);
         setName(obj, index);
         setType(obj, index);
         return obj;
@@ -44,11 +43,6 @@ privileged aspect RecordTypeDataOnDemand_Roo_DataOnDemand {
             description = description.substring(0, 250);
         }
         obj.setDescription(description);
-    }
-    
-    public void RecordTypeDataOnDemand.setIconId(RecordType obj, int index) {
-        BigInteger iconId = BigInteger.valueOf(index);
-        obj.setIconId(iconId);
     }
     
     public void RecordTypeDataOnDemand.setName(RecordType obj, int index) {

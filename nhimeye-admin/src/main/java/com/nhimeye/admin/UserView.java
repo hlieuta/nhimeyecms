@@ -1,4 +1,4 @@
-package com.nhimeye.admin.userview;
+package com.nhimeye.admin;
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
@@ -16,7 +16,6 @@ package com.nhimeye.admin.userview;
  */
 
 import com.google.common.eventbus.EventBus;
-import com.nhimeye.admin.AbstractEntityView;
 import com.nhimeye.data.domain.User;
 import com.nhimeye.data.service.UserService;
 import com.vaadin.data.util.BeanContainer;
@@ -34,7 +33,7 @@ import java.util.Set;
 @Configurable(preConstruction = true)
 public class UserView extends AbstractEntityView<User> {
 
-    BeanContainer<BigInteger, User> container;
+
 
     @Autowired
     UserService userService;

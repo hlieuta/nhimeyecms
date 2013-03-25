@@ -1,4 +1,4 @@
-package com.nhimeye.admin.fieldview;
+package com.nhimeye.admin;
 /*
  * Copyright 2013 NHIMEYE Inc.
  * 
