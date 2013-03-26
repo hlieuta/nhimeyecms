@@ -1,12 +1,10 @@
 package com.nhimeye.admin;
 
 import com.google.common.eventbus.EventBus;
-import com.nhimeye.data.domain.RecordType;
-import com.nhimeye.data.service.RecordTypeService;
+import com.nhimeye.data.domain.Space;
+import com.nhimeye.data.service.SpaceService;
 import com.vaadin.data.util.BeanContainer;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -26,41 +24,49 @@ import java.util.Set;
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the governing permissions and limitations under
+ * License for the specific language governing permissions and limitations under
  * the License.
  */
-
 @Configurable(preConstruction = true)
-public class RecordTypeView extends AbstractEntityView<RecordType> {
+public class SpaceView extends AbstractEntityView<Space> {
 
+     private Button buttonSwitchSpace;
     @Autowired
-    RecordTypeService recordTypeService;
+    SpaceService spaceService;
 
     @Override
     protected void configureToolBar(HorizontalLayout toolbar) {
-
+        buttonSwitchSpace = new Button("Switch to this space");
+        buttonSwitchSpace.addClickListener(new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                ((DashboardUI)getUI()).buildMenu(false);
+            }
+        });
+        buttonSwitchSpace.setEnabled(false);
+        buttonSwitchSpace.setImmediate(true);
+        buttonSwitchSpace.addStyleName("small");
+        toolbar.addComponent(buttonSwitchSpace);
+        toolbar.setComponentAlignment(buttonSwitchSpace, Alignment.MIDDLE_LEFT);
     }
 
     @Override
     protected void configureTable(Table table) {
-        table.setVisibleColumns(new Object[]{"name","description","type"});
-        table.setColumnHeader("name","Name");
-        table.setColumnHeader("description","Description");
-        table.setColumnHeader("type", "Type");
+        table.setVisibleColumns(new Object[]{"name","spaceKey","spaceDomain"});
     }
 
     @Override
     protected Label getTitle() {
-       return new Label("All Record Types");
+        return new Label("All Spaces");
     }
 
     @Override
-    protected BeanContainer<BigInteger, RecordType> getTableContainer() {
+    protected BeanContainer<BigInteger, Space> getTableContainer() {
         if (container == null) {
-            container = new BeanContainer<BigInteger, RecordType>(RecordType.class);
+            container = new BeanContainer<BigInteger, Space>(Space.class);
             container.setBeanIdProperty("id");
-            for (RecordType user : recordTypeService.findAllRecordTypes()) {
-                container.addBean(user);
+            for (Space space : spaceService.findAllSpaces()) {
+                container.addBean(space);
             }
 
         }
@@ -72,8 +78,10 @@ public class RecordTypeView extends AbstractEntityView<RecordType> {
         return new HashSet<String>(){
             {
                 add("name");
-                add("description");
-                add("type");
+                add("spaceKey");
+                add("spaceDomain");
+
+
             }
         };
     }
@@ -85,13 +93,7 @@ public class RecordTypeView extends AbstractEntityView<RecordType> {
 
     @Override
     protected void refreshContainer() {
-        container.removeAllItems();
-        container = new BeanContainer<BigInteger,RecordType>(RecordType.class);
-        container.setBeanIdProperty("id");
 
-        for ( RecordType entity : recordTypeService.findAllRecordTypes()) {
-            container.addBean(entity);
-        }
     }
 
     @Override
@@ -101,10 +103,16 @@ public class RecordTypeView extends AbstractEntityView<RecordType> {
 
     @Override
     protected boolean deleteItems(Set<BigInteger> selectedValues) {
-       for(BigInteger id : selectedValues)
-       {
-           recordTypeService.deleteRecordType(container.getItem(id).getBean());
-       }
-        return true;
+        return false;
+    }
+
+    @Override
+    protected void itemsSelected(Set<BigInteger> selectedValues)
+    {
+
+            if(buttonSwitchSpace != null && selectedValues != null)
+            {
+                buttonSwitchSpace.setEnabled(selectedValues.size() == 1);
+            }
     }
 }

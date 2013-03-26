@@ -24,7 +24,6 @@ import com.vaadin.annotations.Title;
 import com.vaadin.navigator.Navigator;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
-import com.vaadin.server.Page;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.label.ContentMode;
@@ -49,8 +48,7 @@ import java.util.Locale;
 @Title("NHIMEYE CMS")
 public class DashboardUI extends UI {
 
-    private final EventBus bus = new EventBus();
-    private static final long serialVersionUID = 1L;
+    private final EventBus eventBus = new EventBus();
     private static final Logger LOGGER = LoggerFactory.getLogger(DashboardUI.class);
 
     CssLayout root = new CssLayout();
@@ -64,6 +62,7 @@ public class DashboardUI extends UI {
         {
 
             put("/dashboard", DashboardView.class);
+            put("/spaces",SpaceView.class);
             put("/articles", DashboardView.class);
             put("/documents", ReportsView.class);
             put("/recordtypes", RecordTypeView.class);
@@ -81,7 +80,7 @@ public class DashboardUI extends UI {
 
     @Override
     protected void init(final VaadinRequest request) {
-        bus.register(this);
+        eventBus.register(this);
 
         helpManager = new HelpManager(this);
 
@@ -97,17 +96,13 @@ public class DashboardUI extends UI {
         bg.setSizeUndefined();
         bg.addStyleName("login-bg");
         root.addComponent(bg);
-        if(isAuthenticated())
-        {
+        if (isAuthenticated()) {
             buildMainView();
-        }
-        else
-        {
-            loginView = new LoginView(bus,false,root,helpManager,this);
+        } else {
+            loginView = new LoginView(eventBus, false, root, helpManager, this);
         }
 
     }
-
 
 
     private void buildMainView() {
@@ -144,7 +139,7 @@ public class DashboardUI extends UI {
                                 addComponent(logo);
                             }
                         });
-
+                        menu.setImmediate(true);
                         // Main menu
                         addComponent(menu);
                         setExpandRatio(menu, 1);
@@ -171,11 +166,20 @@ public class DashboardUI extends UI {
                                                 .show("Not implemented in this demo");
                                     }
                                 };
+
+                                final Command settingCmd = new Command() {
+                                    @Override
+                                    public void menuSelected(
+                                            final MenuItem selectedItem) {
+                                        buildMenu(true);
+
+                                    }
+                                };
                                 final MenuBar settings = new MenuBar();
                                 final MenuItem settingsMenu = settings.addItem("",
                                         null);
                                 settingsMenu.setStyleName("icon-cog");
-                                settingsMenu.addItem("System Settings", cmd);
+                                settingsMenu.addItem("System Settings", settingCmd);
                                 settingsMenu.addSeparator();
                                 settingsMenu.addItem("My Account", cmd);
                                 addComponent(settings);
@@ -188,7 +192,7 @@ public class DashboardUI extends UI {
                                     @Override
                                     public void buttonClick(final ClickEvent event) {
                                         AuthenticationService.handleLogout(RequestHolder.getRequest());
-                                        loginView = new LoginView(bus,true,root,helpManager,getUI());
+                                        loginView = new LoginView(eventBus, true, root, helpManager, getUI());
                                     }
                                 });
                             }
@@ -204,10 +208,34 @@ public class DashboardUI extends UI {
 
         });
 
+        buildMenu(false);
+
+        nav.addViewChangeListener(new ViewChangeListener() {
+
+            @Override
+            public boolean beforeViewChange(final ViewChangeEvent event) {
+                helpManager.closeAll();
+                return true;
+            }
+
+            @Override
+            public void afterViewChange(final ViewChangeEvent event) {
+                final View newView = event.getNewView();
+            }
+        });
+
+    }
+
+    public void buildMenu(boolean isSystem) {
         menu.removeAllComponents();
 
-        for (final String view : new String[] { "dashboard", "articles",
-                "documents", "recordtypes","fields","users"}) {
+        String[] menuItems = null;
+        if (isSystem) {
+            menuItems = getSystemMenu();
+        } else {
+            menuItems = getMenu();
+        }
+        for (final String view : menuItems) {
             final Button b = new NativeButton(view.substring(0, 1).toUpperCase()
                     + view.substring(1).replace('-', ' '));
             b.addStyleName("icon-" + view);
@@ -222,8 +250,7 @@ public class DashboardUI extends UI {
             });
 
 
-
-                menu.addComponent(b);
+            menu.addComponent(b);
 
 
             viewNameToMenuButton.put("/" + view, b);
@@ -231,43 +258,26 @@ public class DashboardUI extends UI {
         menu.addStyleName("menu");
         menu.setHeight("100%");
 
-        viewNameToMenuButton.get("/dashboard").setHtmlContentAllowed(true);
-        viewNameToMenuButton.get("/dashboard").setCaption(
-                "Dashboard<span class=\"badge\">2</span>");
+        if (!isSystem) {
+            viewNameToMenuButton.get("/dashboard").setHtmlContentAllowed(true);
+            viewNameToMenuButton.get("/dashboard").setCaption(
+                    "Dashboard<span class=\"badge\">2</span>");
 
-        String f = Page.getCurrent().getUriFragment();
-        if (f != null && f.startsWith("!")) {
-            f = f.substring(1);
-        }
-        if (f == null || f.equals("") || f.equals("/")) {
             nav.navigateTo("/dashboard");
             menu.getComponent(0).addStyleName("selected");
-            helpManager.showHelpFor(DashboardView.class);
-        } else {
-            nav.navigateTo(f);
-            helpManager.showHelpFor(routes.get(f));
-            viewNameToMenuButton.get(f).addStyleName("selected");
+        } else
+        {
+            nav.navigateTo("/spaces");
+            menu.getComponent(0).addStyleName("selected");
+           helpManager.addOverlay(
+                            "NHIMEYE Spaces",
+                            "<p>Please double click on the space to work on</p>",
+                            "login");
         }
-
-        nav.addViewChangeListener(new ViewChangeListener() {
-
-            @Override
-            public boolean beforeViewChange(final ViewChangeEvent event) {
-                helpManager.closeAll();
-                return true;
-            }
-
-            @Override
-            public void afterViewChange(final ViewChangeEvent event) {
-                final View newView = event.getNewView();
-                helpManager.showHelpFor(newView);
-            }
-        });
-
     }
 
     private void clearMenuSelection() {
-        for (Iterator<Component> it = menu.getComponentIterator(); it.hasNext();) {
+        for (Iterator<Component> it = menu.getComponentIterator(); it.hasNext(); ) {
             final Component next = it.next();
             if (next instanceof NativeButton) {
                 next.removeStyleName("selected");
@@ -310,8 +320,14 @@ public class DashboardUI extends UI {
 
     }
 
+    private String[] getMenu() {
+        return new String[]{"dashboard", "articles",
+                "documents"};
+    }
 
-
+    private String[] getSystemMenu() {
+        return new String[]{"spaces","recordtypes", "fields", "users"};
+    }
 
 
 }

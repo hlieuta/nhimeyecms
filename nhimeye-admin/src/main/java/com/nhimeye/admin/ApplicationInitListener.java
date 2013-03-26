@@ -20,7 +20,6 @@ import com.nhimeye.data.service.FieldService;
 import com.nhimeye.data.service.UserService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -30,7 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ApplicationInitListener implements
         ApplicationListener<ContextRefreshedEvent> {
 
-    private static final Logger logger = Logger
+    private static final Logger LOGGER = Logger
             .getLogger(ApplicationInitListener.class);
 
 
@@ -40,18 +39,16 @@ public class ApplicationInitListener implements
     @Autowired
     UserService userService;
 
-    @Autowired
-    ApplicationContext ctx;
 
 
 
     @Transactional
     private void createDefaultUser() {
-        logger.info("Checking for system user...");
+        LOGGER.info("Checking for system user...");
         User defaultUser = userService.findByUserName("system");
         if (defaultUser == null) {
             defaultUser = new User();
-            logger.info("No user found in the system. Creating system default user ...");
+            LOGGER.info("No user found in the system. Creating system default user ...");
             defaultUser.setActive(true);
             defaultUser.setFirstName("System");
             defaultUser.setLastName("User");
@@ -59,7 +56,7 @@ public class ApplicationInitListener implements
             defaultUser.setPassword("password");
             defaultUser.setEmail("system@nhimeye.com");
             userService.addUser(defaultUser);
-            logger.info("Done.");
+            LOGGER.info("Done.");
         }
 
     }
@@ -69,7 +66,7 @@ public class ApplicationInitListener implements
         try {
             createDefaultUser();
         } catch (Exception e) {
-            logger.error(e);
+            LOGGER.error(e);
         }
 
     }

@@ -1,5 +1,8 @@
 package com.nhimeye.data.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.roo.addon.javabean.RooJavaBean;
 import org.springframework.roo.addon.layers.repository.mongo.RooMongoEntity;
 import org.springframework.roo.addon.tostring.RooToString;
@@ -36,6 +39,7 @@ public class User {
 
     @NotNull
     private Boolean active;
-
+    
+    private final Set<java.math.BigInteger> spaces = new HashSet<java.math.BigInteger>();  
 
 }

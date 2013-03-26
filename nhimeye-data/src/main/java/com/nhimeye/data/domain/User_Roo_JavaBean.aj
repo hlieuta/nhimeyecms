@@ -4,6 +4,8 @@
 package com.nhimeye.data.domain;
 
 import com.nhimeye.data.domain.User;
+import java.math.BigInteger;
+import java.util.Set;
 
 privileged aspect User_Roo_JavaBean {
     
@@ -53,6 +55,10 @@ privileged aspect User_Roo_JavaBean {
     
     public void User.setActive(Boolean active) {
         this.active = active;
+    }
+    
+    public Set<BigInteger> User.getSpaces() {
+        return this.spaces;
     }
     
 }

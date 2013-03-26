@@ -20,10 +20,7 @@ import com.nhimeye.data.domain.Field;
 import com.nhimeye.data.reference.FieldType;
 import com.nhimeye.data.service.FieldService;
 import com.vaadin.data.util.BeanContainer;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -46,6 +43,11 @@ public class FieldView extends AbstractEntityView<Field> {
              fieldService.deleteField(container.getItem(id).getBean());
         }
         return true;
+    }
+
+    @Override
+    protected void configureToolBar(HorizontalLayout toolbar) {
+
     }
 
     @Override

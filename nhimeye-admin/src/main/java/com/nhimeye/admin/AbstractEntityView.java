@@ -126,7 +126,8 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
         toolbar.setExpandRatio(filter, 1);
         toolbar.setComponentAlignment(filter, Alignment.MIDDLE_LEFT);
 
-
+       configureToolBar(toolbar);
+       
         final Button buttonCreateNew = new Button("Create new");
         buttonCreateNew.addClickListener(new ClickListener() {
             @Override
@@ -199,11 +200,16 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
             public void valueChange(Property.ValueChangeEvent event) {
                 selectedValues = (Set<java.math.BigInteger>) event
                         .getProperty().getValue();
+                itemsSelected(selectedValues);
             }
         });
 
 
     }
+
+    protected void itemsSelected(Set<BigInteger> selectedValues) {
+    }
+
 
     private void refreshTableData() {
         refreshContainer();
@@ -259,4 +265,6 @@ public abstract class AbstractEntityView<E> extends VerticalLayout implements Vi
     protected abstract void viewDetails(BigInteger id,EventBus eventBus);
 
     protected abstract boolean deleteItems(Set<BigInteger> selectedValues);
+
+    protected abstract void configureToolBar(HorizontalLayout toolbar);
 }

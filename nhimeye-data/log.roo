@@ -160,3 +160,17 @@ field string --fieldName contentType
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-03-23 20:54:27
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-03-25 21:07:03
 // Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-03-25 21:08:52
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-03-26 20:46:01
+entity mongo --class ~.domain.Space --testAutomatically
+field string --fieldName name --sizeMax 125 --notNull --unique true 
+// [failed] field string --fieldName key --sizeMax 125 --notNull --unique true 
+field string --fieldName spaceKey --sizeMax 125 --notNull --unique true 
+// [failed] field string --fieldName domain --sizeMax 255
+field string --fieldName spaceDomain --sizeMax 255
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-03-26 20:58:22
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log opened at 2013-03-26 21:04:01
+entity mongo --class ~.domain.UserSpace
+focus  --class ~.domain.Space
+repository mongo --interface ~.repository.SpaceRepository --entity ~.domain.Space
+service --interface ~.service.SpaceService --entity ~.domain.Space
+// Spring Roo 1.2.2.RELEASE [rev 7d75659] log closed at 2013-03-26 21:12:47

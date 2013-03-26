@@ -19,10 +19,7 @@ import com.google.common.eventbus.EventBus;
 import com.nhimeye.data.domain.User;
 import com.nhimeye.data.service.UserService;
 import com.vaadin.data.util.BeanContainer;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Table;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.Window;
+import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 
@@ -37,6 +34,11 @@ public class UserView extends AbstractEntityView<User> {
 
     @Autowired
     UserService userService;
+
+    @Override
+    protected void configureToolBar(HorizontalLayout toolbar) {
+
+    }
 
     @Override
     protected void configureTable(Table table) {
