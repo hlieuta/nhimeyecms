@@ -4,3 +4,6 @@
 *.jar
 *.war
 *.ear
+
+nhimeye-admin/target/*
+nhimeye-data/target/*
